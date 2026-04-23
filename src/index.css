@@ -1,0 +1,124 @@
+/* CSS Variables for Elegant Red Muslimah Theme */
+:root {
+  --primary-red: #8B1A1A; /* Deep Burgundy Red */
+  --soft-red: #C44536; /* Elegant Red */
+  --light-red: #E8D5D0; /* Blush Red */
+  --pale-red: #F5E6E3; /* Very Light Red */
+  
+  --wine: #722F37; /* Wine Red */
+  --crimson: #A52A2A; /* Crimson */
+  
+  --gold: #C9A96E; /* Soft Gold */
+  --gold-light: #E8D5B7; /* Light Gold */
+  --gold-bright: #D4AF37; /* Bright Gold */
+  
+  --cream: #FFF8F5; /* Warm Cream */
+  --ivory: #FFFAF8; /* Ivory */
+  
+  --gradient-primary: linear-gradient(135deg, #8B1A1A 0%, #A52A2A 50%, #C44536 100%);
+  --gradient-red: linear-gradient(135deg, #722F37 0%, #8B1A1A 100%);
+  --gradient-gold: linear-gradient(135deg, #C9A96E 0%, #E8D5B7 50%, #C9A96E 100%);
+  --gradient-hero: linear-gradient(135deg, rgba(114, 47, 55, 0.85) 0%, rgba(139, 26, 26, 0.75) 100%);
+  --gradient-cream: linear-gradient(135deg, #FFF8F5 0%, #F5E6E3 50%, #E8D5D0 100%);
+
+  --light-bg: #FDF8F7; /* Warm Light Background */
+  --surface-bg: #FFFFFF;
+  --text-dark: #3A2A2A; /* Deep Brown-Red */
+  --text-light: #FFFFFF;
+  --text-muted: #A89595;
+  --border-color: #F0E0DC;
+  --border-soft: #F5EBE8;
+
+  --font-heading: 'Playfair Display', serif;
+  --font-body: 'Montserrat', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  font-family: var(--font-body);
+  color: var(--text-dark);
+  background-color: var(--light-bg);
+  line-height: 1.7;
+  overflow-x: hidden;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  font-weight: 600;
+  color: var(--text-dark);
+}
+
+a {
+  text-decoration: none;
+  color: inherit;
+}
+
+button {
+  cursor: pointer;
+  border: none;
+  font-family: var(--font-body);
+}
+
+/* Utilities */
+.container {
+  max-width: 1200px;
+  margin: 0 auto;
+  padding: 0 20px;
+}
+
+.text-center {
+  text-align: center;
+}
+
+/* Buttons */
+.btn {
+  display: inline-block;
+  padding: 14px 32px;
+  border-radius: 50px;
+  font-size: 13px;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 2px;
+  transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+
+.btn-primary {
+  background: var(--gradient-red);
+  color: var(--text-light);
+  border: none;
+  box-shadow: 0 6px 20px rgba(114, 47, 55, 0.3);
+}
+
+.btn-primary:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(114, 47, 55, 0.45);
+}
+
+.btn-gold {
+  background: var(--gradient-gold);
+  color: var(--text-dark);
+  border: none;
+  font-weight: 600;
+  box-shadow: 0 6px 20px rgba(201, 169, 110, 0.3);
+}
+
+.btn-gold:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 10px 30px rgba(201, 169, 110, 0.5);
+}
+
+.btn-outline {
+  background-color: transparent;
+  color: var(--text-light);
+  border: 1px solid var(--text-light);
+}
+
+.btn-outline:hover {
+  background-color: var(--text-light);
+  color: var(--text-dark);
+}
