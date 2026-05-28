@@ -95,8 +95,8 @@ button {
 }
 
 .btn-primary:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(114, 47, 55, 0.45);
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 15px 40px rgba(139, 26, 26, 0.4), 0 0 20px rgba(139, 26, 26, 0.2);
 }
 
 .btn-gold {
@@ -108,8 +108,8 @@ button {
 }
 
 .btn-gold:hover {
-  transform: translateY(-3px);
-  box-shadow: 0 10px 30px rgba(201, 169, 110, 0.5);
+  transform: translateY(-5px) scale(1.05);
+  box-shadow: 0 15px 40px rgba(201, 169, 110, 0.4), 0 0 20px rgba(201, 169, 110, 0.2);
 }
 
 .btn-outline {

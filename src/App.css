@@ -11,12 +11,43 @@
   transform: translateY(0);
 }
 
+/* ===== DYNAMIC MESH BACKGROUND ===== */
+.mesh-background {
+  position: fixed;
+  inset: 0;
+  z-index: -2;
+  background-color: var(--light-bg);
+  overflow: hidden;
+  pointer-events: none;
+}
+
+.mesh-blob {
+  position: absolute;
+  width: 600px;
+  height: 600px;
+  border-radius: 50%;
+  filter: blur(100px);
+  opacity: 0.25;
+  animation: meshMove 25s infinite alternate ease-in-out;
+}
+
+.blob-1 { background: var(--primary-red); top: -10%; left: -10%; animation-duration: 20s; }
+.blob-2 { background: var(--gold); bottom: -10%; right: -10%; animation-duration: 30s; animation-delay: -5s; }
+.blob-3 { background: var(--soft-red); top: 40%; left: 30%; animation-duration: 25s; animation-delay: -10s; }
+
+@keyframes meshMove {
+  0% { transform: translate(0, 0) scale(1) rotate(0deg); }
+  33% { transform: translate(100px, 150px) scale(1.2) rotate(120deg); }
+  66% { transform: translate(-80px, 80px) scale(0.9) rotate(240deg); }
+  100% { transform: translate(0, 0) scale(1) rotate(360deg); }
+}
+
 /* ===== FLOATING ORNAMENTS ===== */
 .floating-ornaments {
   position: fixed;
   inset: 0;
   pointer-events: none;
-  z-index: 0;
+  z-index: -1;
   overflow: hidden;
 }
 
@@ -53,10 +84,10 @@
 
 .navbar.scrolled {
   padding: 12px 0;
-  background: rgba(253, 248, 247, 0.95);
-  backdrop-filter: blur(20px) saturate(1.2);
-  box-shadow: 0 4px 30px rgba(139, 26, 26, 0.1);
-  border-bottom: 1px solid var(--border-color);
+  background: rgba(255, 255, 255, 0.75);
+  backdrop-filter: blur(30px) saturate(1.8);
+  box-shadow: 0 10px 40px rgba(139, 26, 26, 0.08);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.3);
 }
 
 .nav-container {
@@ -512,9 +543,17 @@
 .image-frame {
   border-radius: 20px;
   overflow: hidden;
-  box-shadow: 0 25px 50px rgba(139, 26, 26, 0.15);
-  border: 1px solid var(--border-color);
+  box-shadow: 0 30px 60px rgba(139, 26, 26, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  background: rgba(255, 255, 255, 0.2);
+  backdrop-filter: blur(10px);
   position: relative;
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+.image-frame:hover {
+  transform: translateY(-10px) rotate(-1deg) scale(1.02);
+  box-shadow: 0 40px 80px rgba(139, 26, 26, 0.25);
 }
 
 .image-shine {
@@ -613,20 +652,22 @@
 
 /* ===== FLIP CARD ===== */
 .product-card {
-  perspective: 1200px;
+  perspective: 1500px;
   height: 420px;
   cursor: pointer;
   position: relative;
   border-radius: 20px;
+  transform-style: preserve-3d;
 }
 
 .card-inner {
   position: relative;
   width: 100%;
   height: 100%;
-  transition: transform 0.6s cubic-bezier(0.16, 1, 0.3, 1);
+  transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1);
   transform-style: preserve-3d;
   will-change: transform;
+  transform: translateZ(0);
 }
 
 .product-card.is-flipped .card-inner {
@@ -646,25 +687,36 @@
   height: 100%;
   backface-visibility: hidden;
   -webkit-backface-visibility: hidden;
-  background: var(--surface-bg);
-  border: 1px solid var(--border-soft);
+  background: rgba(255, 255, 255, 0.95);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  transform-style: preserve-3d;
+  box-shadow: 0 15px 35px rgba(139, 26, 26, 0.05);
+  transition: box-shadow 0.5s ease;
+}
+
+.product-card:hover .card-front {
+  box-shadow: 0 25px 60px rgba(139, 26, 26, 0.12);
 }
 
 .card-front {
   display: flex;
   flex-direction: column;
   border-radius: 20px;
+  transform: translateZ(1px);
+  z-index: 2;
 }
 
 .card-back {
-  transform: rotateY(180deg);
+  transform: rotateY(180deg) translateZ(1px);
   display: flex;
   align-items: center;
   justify-content: center;
   padding: 35px;
-  background: linear-gradient(135deg, var(--surface-bg) 0%, var(--light-bg) 100%);
+  background: linear-gradient(135deg, rgba(255, 255, 255, 0.95) 0%, rgba(253, 248, 247, 0.95) 100%);
   border-radius: 20px;
   border: 2px solid var(--primary-red);
+  z-index: 1;
 }
 
 .back-content {
@@ -870,19 +922,21 @@
 
 .testimonial-card {
   padding: 40px 35px;
-  background: var(--light-bg);
-  border-radius: 20px;
-  border: 1px solid var(--border-soft);
-  border-left: 4px solid var(--primary-red);
-  box-shadow: 0 8px 25px rgba(139, 26, 26, 0.05);
-  transition: all 0.4s cubic-bezier(0.16, 1, 0.3, 1);
+  background: rgba(255, 255, 255, 0.7);
+  backdrop-filter: blur(20px);
+  border-radius: 24px;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  border-left: 5px solid var(--primary-red);
+  box-shadow: 0 15px 40px rgba(139, 26, 26, 0.06);
+  transition: all 0.5s cubic-bezier(0.16, 1, 0.3, 1);
   position: relative;
 }
 
 .testimonial-card:hover {
-  transform: translateY(-8px);
-  box-shadow: 0 20px 50px rgba(139, 26, 26, 0.12);
+  transform: translateY(-12px) scale(1.02);
+  box-shadow: 0 30px 70px rgba(139, 26, 26, 0.15);
   border-left-color: var(--gold);
+  background: rgba(255, 255, 255, 0.9);
 }
 
 .testimonial-quote {
@@ -1033,7 +1087,8 @@
 
 .newsletter-form button:hover {
   background-color: var(--gold-bright);
-  transform: translateY(-2px);
+  transform: translateX(5px);
+  box-shadow: -5px 0 15px rgba(212, 175, 55, 0.3);
 }
 
 .vip-success {
@@ -1295,7 +1350,8 @@
   background: var(--primary-red);
   border-color: var(--primary-red);
   color: white;
-  transform: scale(1.1);
+  transform: scale(1.2) rotate(8deg);
+  box-shadow: 0 5px 15px rgba(139, 26, 26, 0.3);
 }
 
 .cart-badge {

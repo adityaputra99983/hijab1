@@ -27,13 +27,18 @@ const TESTIMONIALS = [
 
 const PRESS_LOGOS = ['HIJABERS MAG', 'MUSLIMAH DAILY', 'ZALORA', 'HIJAB FASHION', 'HIJABERS MAG', 'MUSLIMAH DAILY', 'ZALORA', 'HIJAB FASHION'];
 
-function useScrollReveal() {
+function useScrollReveal(onReveal) {
   useEffect(() => {
     const observer = new IntersectionObserver(
       (entries) => {
         entries.forEach((entry) => {
           if (entry.isIntersecting) {
-            entry.target.classList.add('revealed');
+            const id = entry.target.getAttribute('data-reveal-id');
+            if (id) {
+              onReveal(id);
+            } else {
+              entry.target.classList.add('revealed');
+            }
           }
         });
       },
@@ -41,7 +46,7 @@ function useScrollReveal() {
     );
     document.querySelectorAll('.reveal').forEach((el) => observer.observe(el));
     return () => observer.disconnect();
-  }, []);
+  }, [onReveal]);
 }
 
 function createParticles(e) {
@@ -91,7 +96,12 @@ function App() {
   const [orderSuccess, setOrderSuccess] = useState(false);
   const [confetti, setConfetti] = useState([]);
 
-  useScrollReveal();
+  const [revealed, setRevealed] = useState({});
+  const handleReveal = useCallback((id) => {
+    setRevealed((prev) => ({ ...prev, [id]: true }));
+  }, []);
+
+  useScrollReveal(handleReveal);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -222,6 +232,13 @@ function App() {
 
   return (
     <>
+      {/* Dynamic Mesh Background */}
+      <div className="mesh-background" aria-hidden="true">
+        <div className="mesh-blob blob-1" />
+        <div className="mesh-blob blob-2" />
+        <div className="mesh-blob blob-3" />
+      </div>
+
       {/* Floating Ornaments */}
       <div className="floating-ornaments" aria-hidden="true">
         <div className="ornament o1">✿</div>
@@ -316,7 +333,7 @@ function App() {
             }}>✿</div>
           ))}
         </div>
-        <div className="hero-content reveal">
+        <div className={`hero-content reveal ${revealed['hero'] ? 'revealed' : ''}`} data-reveal-id="hero">
           <div className="hero-badge">Koleksi Terbaru 2026</div>
           <h1>Keanggunan Syar'i Masa Kini</h1>
           <div className="hero-divider" />
@@ -360,12 +377,12 @@ function App() {
       {/* About Section */}
       <section id="about" className="section about">
         <div className="container">
-          <h2 className="section-title reveal">
+          <h2 className={`section-title reveal ${revealed['about-title'] ? 'revealed' : ''}`} data-reveal-id="about-title">
             <span className="title-ornament">✿</span>
             Filosofi Aura
           </h2>
           <div className="about-content">
-            <div className="about-image reveal">
+            <div className={`about-image reveal ${revealed['about-img'] ? 'revealed' : ''}`} data-reveal-id="about-img">
               <div className="image-frame">
                 <img src="/about.jfif" alt="Aura Muslimah Filosofi" />
                 <div className="image-shine" />
@@ -375,7 +392,7 @@ function App() {
                 <span>Since 2024</span>
               </div>
             </div>
-            <div className="about-text reveal">
+            <div className={`about-text reveal ${revealed['about-text'] ? 'revealed' : ''}`} data-reveal-id="about-text">
               <h3>Kecantikan Dalam Balutan Ketaatan</h3>
               <p>Di Aura Muslimah, kami percaya bahwa Anda tidak perlu mengorbankan keyakinan untuk tampil menawan. Setiap produk dirancang dengan mengutamakan prinsip kenyamanan, <em>modesty</em> (kesopanan), dan kesucian (halal).</p>
               <p>Dari helai sutra hijab terbaik, formulasi kosmetik yang aman dan <em>wudu-friendly</em>, hingga sajadah yang menenangkan ibadah Anda, kami hadir untuk melengkapi perjalanan anggun Anda sebagai Muslimah modern.</p>
@@ -404,16 +421,17 @@ function App() {
       {/* Products Section */}
       <section id="products" className="section products">
         <div className="container">
-          <h2 className="section-title reveal">
+          <h2 className={`section-title reveal ${revealed['products-title'] ? 'revealed' : ''}`} data-reveal-id="products-title">
             <span className="title-ornament">✿</span>
             Koleksi Lengkap
           </h2>
-          <p className="section-subtitle reveal">Setiap produk dipilih dengan cinta untuk kecantikan dan kenyamanan Anda</p>
+          <p className={`section-subtitle reveal ${revealed['products-subtitle'] ? 'revealed' : ''}`} data-reveal-id="products-subtitle">Setiap produk dipilih dengan cinta untuk kecantikan dan kenyamanan Anda</p>
           <div className="product-grid">
             {PRODUCTS.map((product) => (
               <div
                 key={product.id}
-                className={`product-card reveal ${flippedCards[product.id] ? 'is-flipped' : ''}`}
+                className={`product-card reveal ${revealed[`prod-${product.id}`] || flippedCards[product.id] ? 'revealed' : ''} ${flippedCards[product.id] ? 'is-flipped' : ''}`}
+                data-reveal-id={`prod-${product.id}`}
               >
                 <div className="card-inner">
                   <div className="card-front" onClick={() => toggleFlip(product.id)}>
@@ -429,7 +447,7 @@ function App() {
                       <p className="product-price">{product.price}</p>
                     </div>
                   </div>
-                  <div className="card-back">
+                  <div className="card-back" onClick={() => toggleFlip(product.id)}>
                     <div className="back-content">
                       <h3>{product.name}</h3>
                       <p className="back-desc">{product.desc}</p>
@@ -469,13 +487,13 @@ function App() {
       {/* Testimonials */}
       <section id="testimonials" className="section testimonials">
         <div className="container">
-          <h2 className="section-title reveal">
+          <h2 className={`section-title reveal ${revealed['testi-title'] ? 'revealed' : ''}`} data-reveal-id="testi-title">
             <span className="title-ornament">✿</span>
             Cerita Mereka
           </h2>
           <div className="testimonial-grid">
             {TESTIMONIALS.map((t, i) => (
-              <div key={t.id} className="testimonial-card reveal" style={{ transitionDelay: `${i * 0.1}s` }}>
+              <div key={t.id} className={`testimonial-card reveal ${revealed[`testi-${t.id}`] ? 'revealed' : ''}`} data-reveal-id={`testi-${t.id}`} style={{ transitionDelay: `${i * 0.1}s` }}>
                 <div className="testimonial-quote">"</div>
                 <div className="stars">{starRenderer(t.stars)}</div>
                 <p className="testimonial-text">"{t.text}"</p>
@@ -493,7 +511,7 @@ function App() {
       <section className="newsletter-section">
         <div className="newsletter-bg-pattern" />
         <div className="container">
-          <div className="newsletter-content reveal">
+          <div className={`newsletter-content reveal ${revealed['newsletter'] ? 'revealed' : ''}`} data-reveal-id="newsletter">
             <div className="newsletter-icon">✿</div>
             <h2>Bergabung dengan Klub VIP Aura</h2>
             <p>Dapatkan informasi diskon produk hijab terbaru, rilis makeup halal, dan bonus menarik khusus member.</p>
@@ -525,7 +543,7 @@ function App() {
       <footer className="footer">
         <div className="container">
           <div className="footer-content">
-            <div className="footer-brand reveal">
+            <div className={`footer-brand reveal ${revealed['footer-brand'] ? 'revealed' : ''}`} data-reveal-id="footer-brand">
               <h2><span className="footer-logo-icon">✿</span> AURA MUSLIMAH</h2>
               <p>Mendefinisikan ulang kemewahan muslimah dengan mempertahankan batas-batas ketakwaan dan keanggunan sejati.</p>
               <div className="footer-social">
@@ -534,7 +552,7 @@ function App() {
                 <a href="#" aria-label="Tokopedia"><svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z"/><polyline points="3.27 6.96 12 12.01 20.73 6.96"/><line x1="12" y1="22.08" x2="12" y2="12"/></svg></a>
               </div>
             </div>
-            <div className="footer-links reveal">
+            <div className={`footer-links reveal ${revealed['footer-links-1'] ? 'revealed' : ''}`} data-reveal-id="footer-links-1">
               <h4>Jelajahi</h4>
               <ul>
                 {NAV_LINKS.map((link) => (
@@ -542,7 +560,7 @@ function App() {
                 ))}
               </ul>
             </div>
-            <div className="footer-links reveal">
+            <div className={`footer-links reveal ${revealed['footer-links-2'] ? 'revealed' : ''}`} data-reveal-id="footer-links-2">
               <h4>Bantuan</h4>
               <ul>
                 <li><a href="#">⟶ Hubungi Kami</a></li>
@@ -551,7 +569,7 @@ function App() {
                 <li><a href="#">⟶ Sertifikasi Halal</a></li>
               </ul>
             </div>
-            <div className="footer-links reveal">
+            <div className={`footer-links reveal ${revealed['footer-links-3'] ? 'revealed' : ''}`} data-reveal-id="footer-links-3">
               <h4>Jam Operasional</h4>
               <ul className="footer-hours">
                 <li>Sen - Jum: 08:00 - 21:00</li>
